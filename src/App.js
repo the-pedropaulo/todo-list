@@ -1,5 +1,5 @@
 import './App.css'
-import {useEffect, useState} from 'react'
+import { useState } from 'react'
 
 
 function App() {
@@ -26,7 +26,7 @@ function App() {
         },
         
     ])
-    window.localStorage.setItem('mensagens:tarefas', JSON.stringify([
+    /*window.localStorage.setItem('mensagens:tarefas', JSON.stringify([
       ...tarefas,
       {
         id: new Date().getTime(),
@@ -34,7 +34,7 @@ function App() {
         finalizada: false
       },
       
-  ]))
+  ]))*/
 
     setModal(false)
   };
@@ -49,14 +49,14 @@ function App() {
     })
 
     setTarefas(tarefasAtualizadas)
-    window.localStorage.setItem('mensagens:tarefas', JSON.stringify(tarefasAtualizadas))
+    //window.localStorage.setItem('mensagens:tarefas', JSON.stringify(tarefasAtualizadas))
   };
 
-  useEffect(() => {
+  /*useEffect(() => {
     if(window.localStorage.getItem('mensagens:tarefas') !== undefined) {
       setTarefas(JSON.parse(window.localStorage.getItem('mensagens:tarefas')))
     }
-  }, []);
+  }, []);*/
   
   return (
     <div>
