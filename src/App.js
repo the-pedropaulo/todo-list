@@ -36,11 +36,11 @@ function App() {
     setModal(false)
   };
 
-  const marcarConcluido = (id) => {
+  const marcarConcluido = (id, finish) => {
     
     let tarefasAtualizadas = tarefas.filter((tarefa) => {
       if(tarefa.id === id) {
-        tarefa.finalizada=!tarefa.finalizada
+        tarefa.finalizada=!finish
       }
       return tarefa
     })
@@ -49,10 +49,10 @@ function App() {
     window.localStorage.setItem('mensagens:tarefas', JSON.stringify(tarefasAtualizadas))
   };
 
-  const excluirTarefa = (id) => {
+  const excluirTarefa = (idParam) => {
     
     let tarefasAtualizadas = tarefas.filter((tarefa) => {
-      if(tarefa.id != id) {
+      if(tarefa.id !== idParam) {
         return tarefa
       }
     })
@@ -65,6 +65,7 @@ function App() {
     if(window.localStorage.getItem('mensagens:tarefas') != undefined) {
       setTarefas(JSON.parse(window.localStorage.getItem('mensagens:tarefas')))
     } 
+
   }, []);
   
   return (
@@ -95,15 +96,15 @@ function App() {
                     if(!tarefa.finalizada) {
                       return (
                         <div>
-                          <p onClick={() => marcarConcluido(tarefa.id)}> {tarefa.mensagem} </p>
+                          <p onClick={() => marcarConcluido(tarefa.id, tarefa.finalizada)}> {tarefa.mensagem} </p>
                           <div className="button-lixo" onClick={() => excluirTarefa(tarefa.id)}>X</div>
                         </div>
                       )
                     } else {
                       return (
                         <div>
-                          <p style={{textDecoration:'line-through'}} onClick={() => marcarConcluido(tarefa.id)}> {tarefa.mensagem}</p>
-                          <div className="button-lixo">X</div>
+                          <p style={{textDecoration:'line-through'}} onClick={() => marcarConcluido(tarefa.id, tarefa.finalizada)}> {tarefa.mensagem}</p>
+                          <div className="button-lixo" onClick={() => excluirTarefa(tarefa.id)}>X</div>
                         </div>  
                       )
                     }
