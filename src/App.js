@@ -1,5 +1,5 @@
 import './App.css'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 
 function App() {
@@ -19,44 +19,53 @@ function App() {
     let novaTarefa = document.getElementById("content-tarefa")
     setTarefas([
       ...tarefas,  
-      {
+        {
           id: new Date().getTime(),
           mensagem: novaTarefa.value,
           finalizada: false
-        },
-        
+        },   
     ])
-    /*window.localStorage.setItem('mensagens:tarefas', JSON.stringify([
-      ...tarefas,
+    window.localStorage.setItem('mensagens:tarefas', JSON.stringify([...tarefas,  
       {
         id: new Date().getTime(),
         mensagem: novaTarefa.value,
         finalizada: false
-      },
-      
-  ]))*/
+      },   
+    ]))
 
     setModal(false)
   };
 
   const marcarConcluido = (id) => {
     
-    let tarefasAtualizadas = tarefas.filter(function(tarefa){
+    let tarefasAtualizadas = tarefas.filter((tarefa) => {
       if(tarefa.id === id) {
-        tarefa.finalizada=true
+        tarefa.finalizada=!tarefa.finalizada
       }
       return tarefa
     })
 
     setTarefas(tarefasAtualizadas)
-    //window.localStorage.setItem('mensagens:tarefas', JSON.stringify(tarefasAtualizadas))
+    window.localStorage.setItem('mensagens:tarefas', JSON.stringify(tarefasAtualizadas))
   };
 
-  /*useEffect(() => {
-    if(window.localStorage.getItem('mensagens:tarefas') !== undefined) {
+  const excluirTarefa = (id) => {
+    
+    let tarefasAtualizadas = tarefas.filter((tarefa) => {
+      if(tarefa.id != id) {
+        return tarefa
+      }
+    })
+
+    setTarefas(tarefasAtualizadas)
+    window.localStorage.setItem('mensagens:tarefas', JSON.stringify(tarefasAtualizadas))
+  }
+
+  useEffect(() => {
+    if(window.localStorage.getItem('mensagens:tarefas') != undefined) {
       setTarefas(JSON.parse(window.localStorage.getItem('mensagens:tarefas')))
-    }
-  }, []);*/
+    } 
+  }, []);
   
   return (
     <div>
@@ -65,10 +74,15 @@ function App() {
           modal && 
           <div className="modal">
               <div className="modalContent">
-                  <h3>Adicione sua tarefa</h3>
-                  <input type="text" id="content-tarefa"></input>
-                  <button onClick={() => salvarTarefa()}>Salvar</button>
-              </div>
+                  <div className="modalContentHigh">
+                    <h3>Adicione sua tarefa</h3>
+                    <span onClick={() => abrirModal()}>X</span>
+                  </div>  
+                  <div className="modalContentLow">
+                      <input type="text" id="content-tarefa" placeholder="Digite sua tarefa"></input>
+                      <button onClick={() => salvarTarefa()}>Salvar</button>
+                  </div>
+              </div>      
           </div>
         }
         
@@ -80,11 +94,17 @@ function App() {
                 tarefas.map((tarefa) => {
                     if(!tarefa.finalizada) {
                       return (
-                        <p onClick={() => marcarConcluido(tarefa.id)}> {tarefa.mensagem} </p>
+                        <div>
+                          <p onClick={() => marcarConcluido(tarefa.id)}> {tarefa.mensagem} </p>
+                          <div className="button-lixo" onClick={() => excluirTarefa(tarefa.id)}>X</div>
+                        </div>
                       )
                     } else {
                       return (
-                        <p style={{textDecoration:'line-through'}} onClick={() => marcarConcluido(tarefa.id)}> {tarefa.mensagem}</p>
+                        <div>
+                          <p style={{textDecoration:'line-through'}} onClick={() => marcarConcluido(tarefa.id)}> {tarefa.mensagem}</p>
+                          <div className="button-lixo">X</div>
+                        </div>  
                       )
                     }
                 })
